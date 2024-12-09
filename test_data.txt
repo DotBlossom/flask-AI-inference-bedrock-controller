@@ -1,0 +1,67 @@
+
+product : lambda
+
+{
+  "product": {
+    "product_name": "24 겨울 신상 데상트 캐나다 구스 패딩, 베이지 투톤 컬러",
+    "product_categoty": "아우터",
+    "product_color": "화이트",
+    "product_price": 499000
+  },
+    "product_id": "400" 
+}
+
+{
+  "product": {
+    "product_name": "24 겨울 신상 아디다스 맨투맨 브라운 기모",
+    "product_categoty": "상의",
+    "product_color": "브라운",
+    "product_price": 49900
+  },
+    "product_id": "401" 
+}
+
+{
+  "product": {
+    "product_name": "겨울 기모 화이트 털 비니 모자 ",
+    "product_categoty": "모자",
+    "product_color": "화이트",
+    "product_price": 29000
+  },
+    "product_id": "402" 
+}
+
+
+
+
+@user_actions_bp.route('/ai-api/user/action/<int:userId>', methods=['POST']) 
+{
+"productIds" = [400,401,402]
+}
+
+
+
+
+api/cart/custom/generate Post
+cart : lambda
+{
+  "custom_cart_id": "1234",  
+  "custom_cart_data": {
+    "custom_cart_product_data": [
+      {
+        "product_id": "100",
+        "product_name": "24 겨울 신상 데상트 캐나다 구스 패딩, 베이지 투톤 컬러",
+        "product_categoty": "아우터", 
+        "product_color": "화이트",
+        "product_price": 499000,
+        "quantity": 1 
+      },
+
+    ],
+    "custom_cart_user_data": {
+      "user_id": "user_5678",  
+      "user_name": "홍길동", 
+
+    }
+  }
+}
