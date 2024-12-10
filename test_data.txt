@@ -44,8 +44,13 @@ product : lambda
 
 api/cart/custom/generate Post
 cart : lambda
+
+
+
+
 {
   "custom_cart_id": "1234",  
+  
   "custom_cart_data": {
     "custom_cart_product_data": [
       {
@@ -65,3 +70,20 @@ cart : lambda
     }
   }
 }
+
+
+[
+  {
+    "item_code": "11",
+    "product_name": "포근한 꽈배기 니트 스웨터"
+  },
+  {
+    "item_code": "6",
+    "product_name": "따뜻한 기모 데님 팬츠"
+  },
+  {
+    "item_code": "112",
+    "product_name": "귀여운 털모자"
+  },
+
+]
