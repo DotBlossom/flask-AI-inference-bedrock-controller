@@ -8,3 +8,8 @@
 ## backend-props에 eks cluster와 동일한 URL로 접근가능
 
 ## outbound is 0.0.0.0/0 default, inbound(userAction, curr: 0000, if fix : myVPC CIDR)
+
+
+## front fatching 전략
+    - bedrock custom-cart async result func : var = await func in succ
+    - product add : axios main async - next useRef useEffect
