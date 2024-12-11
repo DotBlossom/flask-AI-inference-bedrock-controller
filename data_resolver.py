@@ -91,7 +91,26 @@ def metadata_retrieve(productId):
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
+    
+    
+    
+@data_resolver_bp.route('/ai-api/metadata/product/<int:productId>', methods=['POST'])
+def metadata_resolve_get(productId):
+    try:
+        # 요청 데이터에서 JSON 데이터 가져오기
+        data = request.get_json()
+        product_data = data.get('product', {})
+        # productId와 JSON 데이터를 MongoDB에 저장
+        collection_metadata.insert_one({
+            'product_id': productId,  # 'product_id' 필드명으로 저장
+            'product': product_data
+        })
+        return jsonify({
+            'message': 'Product metadata saved successfully',
+            'product_id': productId  # 'product_id' 필드명으로 반환
+        }), 200
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
     
 @data_resolver_bp.route('/ai-api/metadata/product/shorts/<int:productId>', methods=['POST'])
 def metadata_resolve(productId):
