@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 import pymongo
 from dotenv import load_dotenv
 import os
+import requests
 
 data_resolver_bp = Blueprint('data_resolver', __name__)
 
@@ -150,3 +151,50 @@ def metadata_resolve(productId):
 
     except Exception as e:
         return jsonify({'message': str(e)})
+    
+    
+    
+@data_resolver_bp.route('/ai-api/mongo', methods=['POST'])
+def save_product():
+    try:
+        # 요청 본문에서 데이터 추출
+        body = request.get_json()
+        product_metadata = body.get("product")
+        product_id = body.get("product_id")
+
+        if not product_metadata or not product_id:
+            return jsonify({'error': 'Missing product_metadata or product_id'}), 400
+
+        # MongoDB에 데이터 저장
+        # ... (MongoDB에 데이터 저장하는 코드 추가)
+
+        # Bedrock 관련 처리 수행
+        product_metadata_to_str = "product_name : " + product_metadata["product_name"] + '/' + "product_category : " + product_metadata["product_category"]
+        bedrock_body = {
+            "product_id": product_id,
+            "product_metadata_to_str": product_metadata_to_str
+        }
+        lambda_endpoint = "https://lambda.dotblossom.today/api/bedrock"
+        headers = {'Content-Type': 'application/json'}
+        bedrock_response = requests.post(lambda_endpoint, headers=headers, json=bedrock_body, timeout=15)
+        bedrock_response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
+        print("Bedrock invoked successfully.")
+
+        # /ai-api/metadata/product/<int:productId> 엔드포인트로 POST 요청 보내기
+        api_ctrl_url = "https://dotblossom.today/ai-api/metadata/product/"
+        api_url = f"{api_ctrl_url}{product_id}"
+        headers = {'Content-Type': 'application/json'}
+        data = {"product": product_metadata}
+        response = requests.post(api_url, headers=headers, json=data, timeout=15)
+        response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
+        print("Metadata saved successfully.")
+
+        # 성공 응답 반환
+        return jsonify({'message': 'Product has been saved and Bedrock invoked'}), 200
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error sending request: {e}")
+        return jsonify({'error': str(e)}), 500
+    except Exception as e:
+        print(f"Error processing request: {e}")
+        return jsonify({'error': str(e)}), 500
