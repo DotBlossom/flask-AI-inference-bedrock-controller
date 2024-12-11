@@ -77,7 +77,9 @@ def default_result_preferences():
                 print(product_id)
 
                 product_metadata_list.append({'product_id': product_id,
-                                              'product' : product_metadata.get('product', {})}) # product_metadata 필드 값만 추가
+                                              'product' : product_metadata.get('product', {}),
+                                              'shorts' :  product_metadata.get('shorts', {})
+                                              }) # product_metadata 필드 값만 추가
                 
         return jsonify({
             "default_preference_id": product_metadata_list,
