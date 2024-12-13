@@ -11,7 +11,7 @@ API_URL = "https://dotblossom.today"
 def embed_product_invoker(productId):
     try:
         # API 엔드포인트 URL 생성
-        api_url = f"{API_URL}/ai-api/products/{productId}"
+        api_url = f"{API_URL}/infer-api/products/{productId}"
         response = requests.get(api_url)
 
         return jsonify({
@@ -24,7 +24,7 @@ def embed_product_invoker(productId):
 @inference_bp.route('/ai-api/invoke/user/embed/<int:userId>', methods=['GET']) 
 def embed_user_invoker(userId):
     try:
-        api_url = f"{API_URL}/ai-api/users/{userId}"  # API 엔드포인트는 실제 환경에 맞게 수정
+        api_url = f"{API_URL}/infer-api/users/{userId}"  # API 엔드포인트는 실제 환경에 맞게 수정
 
         # API 호출
         response = requests.get(api_url)
@@ -45,7 +45,7 @@ def embed_user_invoker(userId):
 @inference_bp.route('/ai-api/invoke/preference/<int:userId>', methods=['POST']) 
 def preference_invoker(userId):
     try:
-        api_url = f"{API_URL}/ai-api/product/preference/infer/{userId}"  # API 엔드포인트는 실제 환경에 맞게 수정
+        api_url = f"{API_URL}/infer-api/product/preference/infer/{userId}"  # API 엔드포인트는 실제 환경에 맞게 수정
 
         # API 호출
         response = requests.get(api_url)
