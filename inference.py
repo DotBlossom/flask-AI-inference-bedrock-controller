@@ -63,13 +63,9 @@ def preference_invoker(userId):
         return jsonify({'message': str(e)}), 500
     
 
-
-def sequential_invoker(userId, productId):
+@inference_bp.route('/ai-api/invoke/sequential/<int:userId>', methods=['POST'])
+def sequential_invoker(userId):
     try:
-        # 1. embed_product_invoker 호출 (직접 호출)
-        response = embed_product_invoker(productId)
-        if response.status_code != 200:
-            return response  # 실패 시 바로 반환
 
         # 2. embed_user_invoker 호출 (직접 호출)
         response = embed_user_invoker(userId)
@@ -84,13 +80,8 @@ def sequential_invoker(userId, productId):
         # 모든 함수가 성공적으로 실행되면 성공 메시지 반환
         return jsonify({
             'user_id': userId,
-            'product_id': productId,
             'message': "Successfully invoked all functions sequentially."
         }), 200
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
-@inference_bp.route('/ai-api/invoke/sequential/<int:userId>/<int:productId>', methods=['GET'])
-def invoke_sequential(userId, productId):
-    return sequential_invoker(userId, productId)

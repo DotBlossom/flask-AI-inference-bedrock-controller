@@ -3,7 +3,7 @@ import pymongo
 from dotenv import load_dotenv
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
-
+import requests
 
 # inference를 스케줄로 call 해도 됨. instant도 만들어.
 
@@ -19,7 +19,7 @@ load_dotenv()
 
 MONGO_URL = os.getenv('MONGO_URL')
 
-
+API_URL = "https://dotblossom.today"
 # MongoDB 클라이언트 생성
 client = pymongo.MongoClient(MONGO_URL)
 db = client['user_actions']  # 'user_actions' 데이터베이스 가져오기
@@ -95,7 +95,8 @@ def get_user_actions(userId):
         else:
             # userId가 없는 경우, 새로운 document 생성
             collection.insert_one({'userId': userId, 'productIds': productIds})
-        
+            url = f"{API_URL}/ai-api/invoke/sequential/{userId}"
+            requests.post(url)
         
         # productId와 count를 user_action_metadata 컬렉션에 업데이트
         for productId in productIds:
@@ -142,7 +143,7 @@ def merge_user_product_scheduled():  # userId 인자 제거
                 else:
                     # userId가 없는 경우, 새로운 document 생성
                     collection.insert_one({'userId': userId, 'productIds': yet_productIds})
-
+                    
                 # 'not_apply_yet' 컬렉션에서 yet_productIds 초기화
                 not_apply_collection.update_one(
                     {'userId': userId},
