@@ -1,0 +1,29 @@
+
+
+# API 호출해서 상품 데이터 가져오고 임베딩하여 저장
+@product_bp.route("/ai-api/products/<int:productId>", methods=["GET"])
+
+if product create :: here
+
+
+# API 호출해서 사용자 데이터 가져오고 임베딩하여 저장
+@user_bp.route("/ai-api/users/<int:userId>", methods=["GET"])
+
+if user register :: here
+
+
+
+# main ai 3
+/ai-api/product/preference/<int:userId>
+
+[
+    {
+        "recommended_productId": [
+            156,
+            130,
+            155
+        ],
+        "user_id": 637
+    },
+    200
+]

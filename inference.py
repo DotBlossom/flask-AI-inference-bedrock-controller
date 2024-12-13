@@ -1,66 +1,96 @@
 from flask import Blueprint, request, jsonify
-
-
+import requests
 
 inference_bp = Blueprint('inference', __name__)
 
 #private Callable Functions Set
 
+API_URL = "http://localhost:5000"
 
-@inference_bp.route('/ai-api/inference/result/<int:userId>', methods=['GET']) 
-def get_inference_result(userId):
+@inference_bp.route('/ai-api/invoke/product/embed/<int:productId>', methods=['GET']) 
+def embed_product_invoker(productId):
+    try:
+        # API 엔드포인트 URL 생성
+        api_url = f"{API_URL}/ai-api/products/{productId}"
+        response = requests.get(api_url)
+
+        return jsonify({
+            'product_id': productId,
+            'message': "success to invoke Product Embedding!"
+        })
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
+@inference_bp.route('/ai-api/invoke/user/embed/<int:userId>', methods=['GET']) 
+def embed_user_invoker(userId):
+    try:
+        api_url = f"{API_URL}/ai-api/users/{userId}"  # API 엔드포인트는 실제 환경에 맞게 수정
+
+        # API 호출
+        response = requests.get(api_url)
+
+        # 성공적으로 호출되었는지 확인 (상태 코드 200 확인)
+        if response.status_code == 200:
+            return jsonify({
+                'user_id': userId,
+                'message': "success to invoke User Embedding!"
+            })
+        else:
+            return jsonify({'message': str(e)}), 500
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
     
-    return 'a'
 
-@inference_bp.route('/ai-api/inference/test/<int:userId>', methods=['POST']) 
-def get_inference_result_2(userId):
-    """
-    프론트엔드에서 전송된 body를 JSON 형식으로 반환합니다.
-    """
+@inference_bp.route('/ai-api/invoke/preference/<int:userId>', methods=['POST']) 
+def preference_invoker(userId):
     try:
-        data = request.get_json()
-        return jsonify(data)
+        api_url = f"{API_URL}/ai-api/product/preference/infer/{userId}"  # API 엔드포인트는 실제 환경에 맞게 수정
+
+        # API 호출
+        response = requests.get(api_url)
+
+        # 성공적으로 호출되었는지 확인 (상태 코드 200 확인)
+        if response.status_code == 200:
+            return jsonify({
+                'user_id': userId,
+                'message': "success to invoke inference and save preference data key"
+            })
+        else:
+            return jsonify({'message': str(e)}), 500
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'message': str(e)}), 500
+    
 
 
-@inference_bp.route('/ai-api/inference/<int:userId>', methods=['POST']) 
-def inference_invoke(userId):
-    """
-    AI 모델 추론을 수행하고 결과를 반환합니다.
-    """
+def sequential_invoker(userId, productId):
     try:
-        data = request.get_json()
+        # 1. embed_product_invoker 호출 (직접 호출)
+        response = embed_product_invoker(productId)
+        if response.status_code != 200:
+            return response  # 실패 시 바로 반환
 
-        # TODO: 여기에 AI 모델 추론 로직을 추가합니다.
-        #       받은 데이터를 사용하여 AI 모델을 실행하고 결과를 생성합니다.
-        #       아래는 예시입니다. 실제 AI 모델 로직으로 대체해야 합니다.
+        # 2. embed_user_invoker 호출 (직접 호출)
+        response = embed_user_invoker(userId)
+        if response.status_code != 200:
+            return response  # 실패 시 바로 반환
 
-        # AI 모델 추론 결과 (예시)
-        result = {
-            "code": "600",  # 고유한 상품 코드 생성
-            "name": data['name'],  # 상품 이름 (받은 데이터에서 가져옴)
-            "category": data['category'],  # 상품 카테고리 (받은 데이터에서 가져옴)
-            "price": data['price'],  # 상품 가격 (받은 데이터에서 가져옴)
-            "thumbnail": "http://example.com/thumbnail.jpg",  # 상품 썸네일 URL (예시)
-            "stock": data['stock']  # 상품 재고 (받은 데이터에서 가져옴)
-        }
+        # 3. preference_invoker 호출 (직접 호출)
+        response = preference_invoker(userId)
+        if response.status_code != 200:
+            return response  # 실패 시 바로 반환
 
-        return jsonify(result)
+        # 모든 함수가 성공적으로 실행되면 성공 메시지 반환
+        return jsonify({
+            'user_id': userId,
+            'product_id': productId,
+            'message': "Successfully invoked all functions sequentially."
+        }), 200
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'message': str(e)}), 500
 
-@inference_bp.route('/ai-api/embed/product/<int:productId>', methods=['POST']) 
-def product_embed_invoke(productId):
-
-    return 'a'
-
-
-@inference_bp.route('/ai-api/embed/user/<int:userId>', methods=['POST']) 
-def user_embed_invoke(userId):
-
-    return 'a'
-
-
+@inference_bp.route('/ai-api/invoke/sequential/<int:userId>/<int:productId>', methods=['GET'])
+def invoke_sequential(userId, productId):
+    return sequential_invoker(userId, productId)

@@ -33,6 +33,37 @@ db_metadata = client.get_database('service_metadata')
 # 'user_action_metadata' 컬렉션 가져오기 (없으면 생성)
 collection_metadata = db_metadata.get_collection('user_action_metadata')
 
+
+@user_actions_bp.route('/ai-api/user/metadata/<int:userId>', methods=['POST'])
+def save_user_metadata(userId):
+    try:
+        # 요청 본문에서 데이터 가져오기
+        data = request.get_json()
+
+        metadata = data['user_metadata']  # 'user_metadata' 키 사용
+        # MongoDB에 저장할 데이터
+        user_data = {
+            'userId': userId,
+            'data': metadata  # metadata 변수 사용
+        }
+
+        # userId로 document 찾기
+        existing_data = collection.find_one({'userId': userId})
+
+        if existing_data:
+            # document가 이미 존재하면 'data' 필드 업데이트
+            collection.update_one({'userId': userId}, {'$set': {'data': metadata}})  # metadata 변수 사용
+            message = "User data updated successfully"
+        else:
+            # document가 존재하지 않으면 새 document 생성
+            collection.insert_one(user_data)
+            message = "User data saved successfully"
+
+        return jsonify({'message': message}), 200
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
+
 @user_actions_bp.route('/ai-api/user/action/<int:userId>', methods=['POST']) 
 def get_user_actions(userId):
 
