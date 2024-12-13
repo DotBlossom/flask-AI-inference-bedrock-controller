@@ -1,18 +1,15 @@
-## atlas에 default db colloection 모두 연동
 
-![sts drawio (3)](https://github.com/user-attachments/assets/82e31572-2562-4b51-a1d8-3f0c76e5a6f5)
-
+## descriptions
 
 
+![스크린샷 2024-12-14 083350](https://github.com/user-attachments/assets/a522a54b-3fc2-407a-91ea-60d3a63e7710)
 
-## backend-props에 eks cluster와 동일한 URL로 접근가능
-
-## outbound is 0.0.0.0/0 default, inbound(userAction, curr: 0000, if fix : myVPC CIDR)
+![스크린샷 2024-12-14 083357](https://github.com/user-attachments/assets/d997babb-bf7d-4905-949c-ae3044492252)
+![스크린샷 2024-12-14 083404](https://github.com/user-attachments/assets/0ed9c16c-fd1d-4f58-b11d-3a2cc7fb0375)
+![스크린샷 2024-12-14 083411](https://github.com/user-attachments/assets/9974c0f6-8f2c-40b8-9040-a5d016d9f8c6)
+![스크린샷 2024-12-14 083140](https://github.com/user-attachments/assets/2fa6d263-1fd8-4692-80ec-9088305dc9d9)
 
 
 ## front fatching 전략
     - bedrock custom-cart async result func : var = await func in succ
     - product add : axios main async - next useRef useEffect
-
-
-## need Prompt Synchronizer 
