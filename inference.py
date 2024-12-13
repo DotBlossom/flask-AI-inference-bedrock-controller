@@ -5,7 +5,7 @@ inference_bp = Blueprint('inference', __name__)
 
 #private Callable Functions Set
 
-API_URL = "http://localhost:5000"
+API_URL = "https://dotblossom.today"
 
 @inference_bp.route('/ai-api/invoke/product/embed/<int:productId>', methods=['GET']) 
 def embed_product_invoker(productId):

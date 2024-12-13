@@ -13,3 +13,6 @@
 ## front fatching 전략
     - bedrock custom-cart async result func : var = await func in succ
     - product add : axios main async - next useRef useEffect
+
+
+## need Prompt Synchronizer 
