@@ -101,15 +101,32 @@ def metadata_resolve_get(productId):
         # 요청 데이터에서 JSON 데이터 가져오기
         data = request.get_json()
         product_data = data.get('product', {})
-        # productId와 JSON 데이터를 MongoDB에 저장
-        collection_metadata.insert_one({
-            'product_id': productId,  # 'product_id' 필드명으로 저장
-            'product': product_data
-        })
-        return jsonify({
-            'message': 'Product metadata saved successfully',
-            'product_id': productId  # 'product_id' 필드명으로 반환
-        }), 200
+
+        # productId로 기존 데이터 찾기
+        product_metadata = collection_metadata.find_one({'product_id': productId})
+
+        if product_metadata:
+            # 'product' 필드 업데이트 (덮어쓰기)
+            collection_metadata.update_one(
+                {'product_id': productId},
+                {'$set': {'product': product_data}}
+            )
+            return jsonify({
+                'message': 'Product metadata updated successfully',
+                'product_id': productId
+            }), 200
+
+        else:
+            # productId로 데이터를 찾지 못했으므로 새로 생성
+            collection_metadata.insert_one({
+                'product_id': productId,
+                'product': product_data
+            })
+            return jsonify({
+                'message': 'Product metadata saved successfully',
+                'product_id': productId
+            }), 200
+
     except Exception as e:
         return jsonify({'message': str(e)}), 500
     
@@ -124,34 +141,31 @@ def metadata_resolve(productId):
         product_metadata = collection_metadata.find_one({'product_id': productId})
 
         if product_metadata:
-            # 'shorts' 필드가 없다면 추가
-            if 'shorts' not in product_metadata:
-                collection_metadata.update_one(
-                    {'product_id': productId},
-                    {'$set': {'shorts': shorts_data}}
-                )
-                return jsonify({
-                    'message': 'Shorts data added successfully',
-                    'product_id': productId,
-                    'shorts': shorts_data
-                }), 200
-            else:
-                # 'shorts' 필드가 이미 있다면 업데이트 (덮어쓰기)
-                collection_metadata.update_one(
-                    {'product_id': productId},
-                    {'$set': {'shorts': shorts_data}}
-                )
-                return jsonify({
-                    'message': 'Shorts data updated successfully',
-                    'product_id': productId,
-                    'shorts': shorts_data
-                }), 200
+            # 'shorts' 필드 업데이트 (덮어쓰기)
+            collection_metadata.update_one(
+                {'product_id': productId},
+                {'$set': {'shorts': shorts_data}}
+            )
+            return jsonify({
+                'message': 'Shorts data updated successfully',
+                'product_id': productId,
+                'shorts': shorts_data
+            }), 200
+
         else:
-            return jsonify({'message': 'Product metadata not found'}), 404
+            # productId로 데이터를 찾지 못했으므로 새로 생성
+            collection_metadata.insert_one({
+                'product_id': productId,
+                'shorts': shorts_data
+            })
+            return jsonify({
+                'message': 'Product metadata created with shorts data',
+                'product_id': productId,
+                'shorts': shorts_data
+            }), 200
 
     except Exception as e:
         return jsonify({'message': str(e)})
-    
     
     
 @data_resolver_bp.route('/ai-api/mongo', methods=['POST'])
