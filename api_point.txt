@@ -27,3 +27,29 @@ if user register :: here
     },
     200
 ]
+
+
+
+
+@data_resolver_bp.route('/ai-api/bedrock/result/<int:productId>', methods=['POST'])
+@data_resolver_bp.route('/ai-api/bedrock/result/<int:productId>', methods=['GET'])
+@data_resolver_bp.route('/ai-api/metadata/product/<int:productId>', methods=['GET'])
+@data_resolver_bp.route('/ai-api/metadata/product/<int:productId>', methods=['POST'])
+@data_resolver_bp.route('/ai-api/metadata/product/shorts/<int:productId>', methods=['POST'])
+@data_resolver_bp.route('/ai-api/mongo', methods=['POST'])
+@inference_bp.route('/ai-api/invoke/product/embed/<int:productId>', methods=['GET']) 
+@inference_bp.route('/ai-api/invoke/user/embed/<int:userId>', methods=['GET'])
+@inference_bp.route('/ai-api/invoke/preference/<int:userId>', methods=['POST'])
+@inference_bp.route('/ai-api/invoke/sequential/<int:userId>', methods=['POST'])
+@inference_bp.route('/ai-api/invoke/sequential/product/embed', methods=['POST'])
+
+@result_bp.route('/ai-api/preference/<int:userId>', methods=['GET'])
+@default_result_bp.route('/ai-api/preference/default', methods=['GET'])
+@user_actions_bp.route('/ai-api/user/metadata/<int:userId>', methods=['POST'])  
+@user_actions_bp.route('/ai-api/user/action/<int:userId>', methods=['POST'])
+@user_actions_bp.route('/ai-api/user/action/yet/<int:userId>', methods=['POST'])
+@user_actions_bp.route('/ai-api/user/action/yet/<int:userId>', methods=['GET'])
+@user_actions_bp.route('/ai-api/scheduler/run', methods=['POST'])
+@user_actions_bp.route('/ai-api/scheduler/instant/run', methods=['POST'])
+def merge_user_product_scheduled(): 
+
