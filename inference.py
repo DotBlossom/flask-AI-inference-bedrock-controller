@@ -71,6 +71,7 @@ def preference_invoker(userId):
         return jsonify({'message': str(e)}), 500
 
 
+#new user is buying something -> pref
 @inference_bp.route('/ai-api/invoke/sequential/<int:userId>', methods=['POST'])
 def sequential_invoker(userId):
     try:
@@ -91,7 +92,9 @@ def sequential_invoker(userId):
     except Exception as e:
         return jsonify({'message': str(e)}), 500
     
-    
+
+
+#product embed Auto propagations
 @inference_bp.route('/ai-api/invoke/sequential/product/embed', methods=['POST'])  
 def update_product_embedding():  
     try:
