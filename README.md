@@ -13,3 +13,27 @@
 ## front fatching 전략
     - bedrock custom-cart async result func : var = await func in succ
     - product add : axios main async - next useRef useEffect
+
+
+## P,N, A boundary Indexing
+    
+    N = negative
+    Lx = Reg number of B
+    fn = features of categorize
+    B(u,l).fn = u,l boundary
+    
+    
+    N = T - (A - P) / Lx
+    B(u,l)f1 = [0.1 , Pi({x,n}, 1->k) x / Ly 
+
+    feature selector : Dominent[1] , Sub(W) = f(k-1)[0.01, 0.001 .. ]
+
+    
+    B(u,l)f1 = [0.1 , Pi({x,n}, 1->k) x / Ly1 
+    B(u,l)f2 = [B(l)f1 , Pi({x,n}, 1->k) x / Ly2]
+    ..
+    B(u,l)fn = [B(l)fn , Pi({x,n}, 1->k) x / Lyn]
+
+    S(B(u,l)f(k)) = key indexing Boundary values.
+
+    or Cx(B(u,l)f(k)) -> n filters. of parallel (Vector N d)
