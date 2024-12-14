@@ -26,12 +26,13 @@ db = client['user_actions']  # 'user_actions' 데이터베이스 가져오기
 collection = db['user_purchases']  # 'user_purchases' 컬렉션 가져오기
 not_apply_collection = db['not_apply_yet']  # 'not_apply_yet' 컬렉션 가져오기
 
-
 # 'service_metadata' 데이터베이스 가져오기 (없으면 생성)
 db_metadata = client.get_database('service_metadata')
 
 # 'user_action_metadata' 컬렉션 가져오기 (없으면 생성)
 collection_metadata = db_metadata.get_collection('user_action_metadata')
+
+collection_prod_metadata = db_metadata.get_collection('product_metadata')
 
 
 @user_actions_bp.route('/ai-api/user/metadata/<int:userId>', methods=['POST'])
@@ -63,7 +64,7 @@ def save_user_metadata(userId):
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-
+'''
 @user_actions_bp.route('/ai-api/user/action/<int:userId>', methods=['POST']) 
 def get_user_actions(userId):
 
@@ -95,8 +96,8 @@ def get_user_actions(userId):
         else:
             # userId가 없는 경우, 새로운 document 생성
             collection.insert_one({'userId': userId, 'productIds': productIds})
-            url = f"{API_URL}/ai-api/invoke/sequential/{userId}"
-            requests.post(url)
+            #url = f"{API_URL}/ai-api/invoke/sequential/{userId}"
+            #requests.post(url)
         
         # productId와 count를 user_action_metadata 컬렉션에 업데이트
         for productId in productIds:
@@ -115,8 +116,57 @@ def get_user_actions(userId):
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
-    
-    
+'''
+@user_actions_bp.route('/ai-api/user/action/<int:userId>', methods=['POST'])
+def acc_user_actions(userId):
+    try:
+        # 요청 데이터에서 productIds 가져오기
+        data = request.get_json()
+        productIds = data.get('productIds', [])
+
+        # productIds가 리스트가 아니거나 비어있는 경우 에러 반환
+        if not isinstance(productIds, list) or not productIds:
+            return jsonify({'message': 'Invalid productIds'}), 400
+
+        # 'user_actions' 데이터베이스 가져오기 (없으면 생성)
+        db = client['user_actions']
+
+        # 'user_purchases' 컬렉션 가져오기 (없으면 생성)
+        collection = db['user_purchases']
+
+        # userId를 이용하여 document 찾기
+        user_data = collection.find_one({'userId': userId})
+
+        if user_data:
+            # userId가 이미 존재하는 경우, productIds 업데이트
+            collection.update_one(
+                {'userId': userId},
+                {'$addToSet': {'productIds': {'$each': productIds}}}
+            )
+
+        else:
+            # userId가 없는 경우, 새로운 document 생성
+            collection.insert_one({'userId': userId, 'productIds': productIds})
+            # url = f"{API_URL}/ai-api/invoke/sequential/{userId}"
+            # requests.post(url)
+
+        # productId와 count를 user_action_metadata 컬렉션에 업데이트
+        for productId in productIds:
+            # product_metadata 컬렉션에서 productId 존재 여부 확인
+            if collection_prod_metadata.find_one({'product_id': productId}):  # 변수 이름 변경
+               collection_metadata.update_one(  # 변수 이름 변경
+                    {'productId': productId},
+                    {'$inc': {'count': 1}},
+                    upsert=True  # document가 없으면 생성
+                )
+
+        return jsonify({
+            "productIds": productIds,
+            "message": "success to save Ids"
+        }), 200
+
+    except Exception as e:
+        return jsonify({'message': str(e)}), 500
     
 def merge_user_product_scheduled():  # userId 인자 제거
 
