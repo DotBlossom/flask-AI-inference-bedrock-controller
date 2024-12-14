@@ -19,7 +19,7 @@ load_dotenv()
 
 MONGO_URL = os.getenv('MONGO_URL')
 
-API_URL = "https://dotblossom.today"
+API_URL = os.getenv('API_URL_PROD')
 # MongoDB 클라이언트 생성
 client = pymongo.MongoClient(MONGO_URL)
 db = client['user_actions']  # 'user_actions' 데이터베이스 가져오기

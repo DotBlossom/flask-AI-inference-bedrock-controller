@@ -14,7 +14,7 @@ def request_preprocess(product_code, result):
         },
     }
 
-    url = f"https://dotblossom.today/ai-api/metadata/product/shorts/{product_code}"
+    url = f""
 
     headers = {"Content-type": "application/json"}
 

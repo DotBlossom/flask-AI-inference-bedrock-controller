@@ -8,8 +8,8 @@ inference_bp = Blueprint('inference', __name__)
 
 #private Callable Functions Set
 
-API_URL = "https://dotblossom.today"
-#API_URL = "http://localhost:5000"
+API_URL = os.getenv('API_URL_PROD')
+
 
 
 load_dotenv()
