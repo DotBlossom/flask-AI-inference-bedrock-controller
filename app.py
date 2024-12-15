@@ -5,6 +5,7 @@ from result import result_bp, default_result_bp
 from user_actions import user_actions_bp
 from inference import inference_bp
 from data_resolver import data_resolver_bp
+from flow_controller import flow_controller_bp
 
 # APP name definition
 app = Flask(__name__)
@@ -25,6 +26,7 @@ app.register_blueprint(inference_bp)
 
 ##
 app.register_blueprint(data_resolver_bp)
+app.register_blueprint(flow_controller_bp)
 #EOL
 
 # ECS HealthChecker Router

@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import os
 from apscheduler.schedulers.background import BackgroundScheduler
 import requests
+from inference import sequential_invoker
 
 # inference를 스케줄로 call 해도 됨. instant도 만들어.
 
@@ -58,7 +59,8 @@ def save_user_metadata(userId):
         else:
             # document가 존재하지 않으면 새 document 생성
             collection.insert_one(user_data)
-            message = "User data saved successfully"
+            message = "User data saved successfully _ create"
+
 
         return jsonify({'message': message}), 200
 
@@ -149,6 +151,7 @@ def acc_user_actions(userId):
             collection.insert_one({'userId': userId, 'productIds': productIds})
             # url = f"{API_URL}/ai-api/invoke/sequential/{userId}"
             # requests.post(url)
+            # sequential_invoker(userId)
 
         # productId와 count를 user_action_metadata 컬렉션에 업데이트
         for productId in productIds:
@@ -289,7 +292,7 @@ def run_scheduler():
             scheduler.add_job(
                 merge_user_product_scheduled, 
                 'cron', 
-                hour=0, 
+                hour=3, 
                 id='merge_user_product_job'  # 작업 ID 설정
             )
             scheduler.start()

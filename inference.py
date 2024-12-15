@@ -26,73 +26,59 @@ prev_collection = prev_db.get_collection('product_data')
 
 @inference_bp.route('/ai-api/invoke/product/embed/<int:productId>', methods=['GET']) 
 def embed_product_invoker(productId):
-    try:
+
         # API 엔드포인트 URL 생성
         api_url = f"{API_URL}/infer-api/products/{productId}"
         headers = {'Content-Type': 'application/json'}
         response = requests.get(api_url,headers=headers)
         response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
-        return jsonify({
-            'product_id': productId,
-            'message': "success to invoke Product Embedding!"
-        })
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return response
+
 
 @inference_bp.route('/ai-api/invoke/user/embed/<int:userId>', methods=['GET'])
 def embed_user_invoker(userId):
-    try:
+
         api_url = f"{API_URL}/infer-api/users/{userId}"
         headers = {'Content-Type': 'application/json'}
         response = requests.get(api_url, headers=headers)
         response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
-        return jsonify({
-            'user_id': userId,
-            'message': "success to invoke User Embedding!"
-        })
-
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
+        return response
 
 
+# create user_preference_object in DB
 @inference_bp.route('/ai-api/invoke/preference/<int:userId>', methods=['POST'])
 def preference_invoker(userId):
-    try:
         api_url = f"{API_URL}/infer-api/product/preference/{userId}"
         headers = {'Content-Type': 'application/json'}
         response = requests.get(api_url, headers=headers)  # GET 요청으로 변경
         response.raise_for_status()  # HTTP 오류 발생 시 예외 발생
-        return jsonify({
-            'user_id': userId,
-            'message': "success to invoke inference and save preference data key"
-        })
+        return response
 
-    except Exception as e:
-        return jsonify({'message': str(e)}), 500
-
-
+# create user_preference_object in DB
 #new user is buying something -> pref
 @inference_bp.route('/ai-api/invoke/sequential/<int:userId>', methods=['POST'])
 def sequential_invoker(userId):
     try:
         # 2. embed_user_invoker 호출 (직접 호출)
-        response = embed_user_invoker(userId)
-
-
+        response_prev = embed_user_invoker(userId)
+        response_prev.raise_for_status() 
         # 3. preference_invoker 호출 (직접 호출)
         response = preference_invoker(userId)
+        response.raise_for_status() 
 
-
+        res_raw = response.json()
+        res = res_raw[0].get('recommended_productId')
+        
         # 모든 함수가 성공적으로 실행되면 성공 메시지 반환
         return jsonify({
             'user_id': userId,
+            'recommended_productId' : res,
             'message': "Successfully invoked all functions sequentially."
         }), 200
 
     except Exception as e:
         return jsonify({'message': str(e)}), 500
     
-
 
 #product embed Auto propagations
 @inference_bp.route('/ai-api/invoke/sequential/product/embed', methods=['POST'])  
