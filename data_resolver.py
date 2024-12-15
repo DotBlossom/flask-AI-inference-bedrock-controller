@@ -188,7 +188,7 @@ def save_product():
             "product_id": product_id,
             "product_metadata_to_str": product_metadata_to_str
         }
-        lambda_endpoint = "https://lambda.dotblossom.today/api/bedrock"
+        lambda_endpoint = "https://dotblossom.today/ai-api/bedrock/invoke"
         headers = {'Content-Type': 'application/json'}
         bedrock_response = requests.post(lambda_endpoint, headers=headers, json=bedrock_body, timeout=15)
         bedrock_response.raise_for_status()  # HTTP 오류 발생 시 예외 발생

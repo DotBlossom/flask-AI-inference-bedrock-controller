@@ -12,7 +12,7 @@ client = boto3.client("bedrock-runtime", region_name="ap-northeast-2")
 model_id = "anthropic.claude-3-5-sonnet-20240620-v1:0"  
 
 flow_controller_bp = Blueprint("flow_controller" , __name__)
-
+'''
 scheduler_invoke_prefer = BackgroundScheduler()
 
 
@@ -35,7 +35,7 @@ def run_prefer_scheduler():
         return jsonify({'message': str(e)}), 500
 
 
-
+'''
 
 @flow_controller_bp.route('/ai-api/bedrock/invoke', methods=['POST'])
 def bedrock_invoke():
