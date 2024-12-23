@@ -59,3 +59,9 @@
     - f_registor && usr_actions(n>=5, metadata * other usr)
     - if usr action && scheduler 
     - sheduler && is_var
+
+## gemini 활용법
+    - 직접 작성한 flask 코드를 기반으로, 동일한 양식을 프롬프트에 적절히 요청하여, 하나의 코드로직으로 여러 코드를 생성 후 바로 이식
+    > py 기반 code기 때문에, 생성 정확도가 매우 높다. (flask 채택 이유)
+    - flask --> fastAPI migrate의 경우, 완성된 flask code에, svc async 와 sync type을 구분 후, async : DB 의 type을 맞추고, 코드를 생성 후 바로 이식
+    > flask 기반 code기 때문에, 생성 정확도가 매우 높다 (flask 채택 이유)
