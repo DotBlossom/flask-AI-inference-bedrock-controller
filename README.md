@@ -37,3 +37,6 @@
     S(B(u,l)f(k)) = key indexing Boundary values.
 
     or Cx(B(u,l)f(k)) -> n filters. of parallel (Vector N d)
+
+## migrate to fastAPI 
+    https://github.com/DotBlossom/ai-pref-pipeline-fastAPI
