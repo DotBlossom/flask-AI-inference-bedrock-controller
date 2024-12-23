@@ -48,3 +48,8 @@
 
 ## migrate to fastAPI 
     https://github.com/DotBlossom/ai-pref-pipeline-fastAPI
+
+## propagations ctrl
+    - f_registor && usr_actions(n>=5, metadata * other usr)
+    - if usr action && scheduler 
+    - sheduler && is_var
