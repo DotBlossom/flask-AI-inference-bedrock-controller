@@ -13,7 +13,8 @@
 ## front fatching 전략
     - bedrock custom-cart async result func : var = await func in succ
     - product add : axios main async - next useRef useEffect
-
+    - make "body" object to convert any type of datastreams.
+    - function of propagation of actions : await syncer
 
 ## P,N, A boundary Indexing
     
@@ -37,6 +38,13 @@
     S(B(u,l)f(k)) = key indexing Boundary values.
 
     or Cx(B(u,l)f(k)) -> n filters. of parallel (Vector N d)
+
+    ver2.
+    multivar_ranker(operated by type of LLM res)
+    rf = dominent_selector + S{(1,argmax(k:3), w =: 0.001w} w(k) * sub_selector(k)}
+    re = rf * t(pre) , d = 16
+    v(re) = 16 innerproductor, if thrs >= k , merge types
+    v(re(n)) * v(re(u)) : pretrained input selector of thrs
 
 ## migrate to fastAPI 
     https://github.com/DotBlossom/ai-pref-pipeline-fastAPI
