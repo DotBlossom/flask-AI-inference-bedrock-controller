@@ -10,6 +10,12 @@
 ![스크린샷 2024-12-14 083140](https://github.com/user-attachments/assets/2fa6d263-1fd8-4692-80ec-9088305dc9d9)
 
 
+![스크린샷 2024-12-23 131657](https://github.com/user-attachments/assets/ab7e6f3b-47c2-46ed-b9e3-35ae477a47ba)
+![스크린샷 2024-12-23 131706](https://github.com/user-attachments/assets/b60aeffe-99c2-4cb7-9c57-ec9a42669475)
+
+![스크린샷 2024-12-23 131647](https://github.com/user-attachments/assets/479f3765-e977-4747-9786-69e2cfe1c903)
+
+
 ## front fatching 전략
     - bedrock custom-cart async result func : var = await func in succ
     - product add : axios main async - next useRef useEffect
